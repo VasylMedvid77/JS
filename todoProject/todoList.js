@@ -14,7 +14,7 @@ class Page {
 
   async init() {
     const data = await this.fetchData();
-    for (let item of data["todos"]) {
+    for (let item of data.todos) {
       this.list.push(new ListItem(item));
     }
     this.render();
@@ -99,14 +99,14 @@ class Page {
 }
 class ListItem {
   constructor(item) {
-    this.text = item["todo"];
-    this.id = item["id"] || Math.floor(Math.random() * 1000);
-    this.status = item["completed"] || false;
+    this.text = item.todo;
+    this.id = item.id || Math.floor(Math.random() * 1000);
+    this.status = item.completed || false;
     this.deleteButton = document.createElement("button");
     this.deleteButton.className = "delete-btn";
     this.checkmark = document.createElement("div");
     this.checkmark.className = "checkmark";
-    this.checkmark.setAttribute("checked", item["completed"]);
+    this.checkmark.setAttribute("checked", item.completed);
     this.html = this.html();
   }
 
