@@ -1,0 +1,182 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 1em "Roboto Condensed";
+  min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  border-bottom: dotted lightgray 2px;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+ol {
+  list-style: none; /* Remove default list bullets */
+  padding: 1em;
+}
+
+li {
+  display: flex; /* Flexbox to align items in a row */
+  align-items: center; /* Vertically align items */
+  position: relative;
+  padding-left: 1.5em;
+  text-transform: uppercase;
+}
+
+div[class="checkmark"] {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  border: 2px solid black;
+  background-color: transparent;
+  transform: translateY(-50%);
+}
+
+div[class="checkmark"][checked="true"] {
+  border: 2px dotted black;
+  background-color: lightgrey;
+}
+
+li[completed="true"] {
+  text-decoration: line-through;
+  color: lightgrey;
+}
+
+li:hover {
+  font-size: larger;
+  font-weight: bolder;
+}
+
+li:hover .delete-btn {
+  visibility: visible;
+}
+
+.delete-btn {
+  visibility: hidden;
+  position: relative;
+  top: 50%;
+  background-image: url("delete-left-svgrepo-com.svg");
+  background-size: cover;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+button[id="addNew"] {
+  margin: 2em;
+  border: none; /* No border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for the button */
+  font-size: 1em; /* Font size */
+  text-transform: uppercase;
+  font-weight: bolder;
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+button[id="addNew"]:hover {
+  display: block;
+  background-color: #45a049; /* Slightly darker green on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+}
+
+button[id="addNew"]:active {
+  background-color: #388e3c; /* Even darker green when clicked */
+  transform: scale(0.98); /* Slightly shrink the button on click */
+}
+
+button[id="addNew"]:focus {
+  outline: none; /* Remove outline when button is focused */
+  box-shadow: 0 0 10px rgba(72, 187, 120, 0.8); /* Focused button with a green glow */
+}
+
+#popupWrapper {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none; /* hidden by default */
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  align-items: center;
+  z-index: 1000;
+}
+
+#popupContent {
+  position: relative;
+  border: 10px solid;
+  border-color: transparent;
+  width: 50%;
+  height: 30%;
+  background-color: lightgray;
+}
+
+#textInput {
+  font-family: inherit;
+  font-size: 1em;
+  text-transform: uppercase;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  position: relative;
+  padding: 1em;
+  width: 100%;
+  resize: none;
+}
+
+#ok,
+#cancel {
+  height: 2em;
+  width: 6em;
+}
+
+#close {
+  position: absolute;
+  background-color: tomato;
+  background-image: url("close-svgrepo-com.svg");
+  background-size: cover;
+  background-position: center;
+  background-color: transparent;
+  top: 0;
+  right: 0;
+  width: 2em;
+  height: 2em;
+  border: 1px;
+}
+
+#cancel {
+  position: absolute;
+  bottom: 1em;
+  right: 0;
+}
+
+#ok {
+  position: absolute;
+  bottom: 1em;
+  left: 0;
+}
+
+footer {
+  height: 90px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  width: 100%;
+  color: white;
+  text-align: left;
+  z-index: 500; /* Ensures it stays above other elements */
+}
