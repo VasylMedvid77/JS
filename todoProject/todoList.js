@@ -1,4 +1,4 @@
-const URL = "https://dummyjson.com/todos";
+const remoteURL = "https://dummyjson.com/todos";
 
 class Page {
   constructor() {
@@ -8,15 +8,15 @@ class Page {
   }
 
   async fetchData() {
-    const request = await fetch(URL);
+    const request = await fetch(remoteURL);
     return await request.json();
   }
 
   async init() {
     const data = await this.fetchData();
-    for (let item of data.todos) {
+    data.todos.forEach((item) => {
       this.list.push(new ListItem(item));
-    }
+    });
     this.render();
     this.formHandler();
     this.deleteHandler();
@@ -31,13 +31,14 @@ class Page {
   checkmarkHandler() {
     document.addEventListener("click", (event) => {
       const clickedElement = event.target;
-      if (clickedElement.className == "checkmark") {
+      if (clickedElement.className === "checkmark") {
         event.stopPropagation();
 
         const checked = JSON.parse(clickedElement.getAttribute("checked"));
-        console.log("Checked" + checked);
         const htmlId = clickedElement.parentElement.id;
-        const itemIndex = this.list.findIndex((item) => item.id == htmlId);
+        const itemIndex = this.list.findIndex(
+          (item) => item.id === Number(htmlId)
+        );
         // to preserve state after new render
         this.list[itemIndex].status = !checked;
         clickedElement.setAttribute("checked", `${!checked}`);
@@ -67,7 +68,7 @@ class Page {
       event.stopPropagation();
       const hoveredElement = event.target;
       // if hovered item is delete button then second handler created
-      if (hoveredElement.className == "delete-btn") {
+      if (hoveredElement.className === "delete-btn") {
         // deleted button created as child element of li list item
         // having access to parent li we have ability to delete it from DOM
         // as well as find item by id in general list and delete it from there
@@ -76,13 +77,11 @@ class Page {
         hoveredElement.addEventListener("click", () => {
           // html id is the id of LI element. Every LI element have id from fetched data from BE
           const htmlId = hoveredElement.parentElement.id;
-          const itemIndex = this.list.findIndex((item) => item.id == htmlId);
-          console.log(`Deleted item: ${this.list[itemIndex].text}`);
-
-          //delete item class instance from array storage
+          const itemIndex = this.list.findIndex((item) => item.id === htmlId);
+          // delete item class instance from array storage
           this.list.splice(itemIndex, 1);
 
-          //delete item from dom
+          // delete item from dom
           hoveredElement.parentElement.remove();
         });
       }
@@ -90,11 +89,8 @@ class Page {
   }
 
   render() {
-    console.log("rendering");
     this.htmlList.replaceChildren();
-    for (const item of this.list) {
-      this.addToDOMlist(item.html);
-    }
+    this.list.forEach((item) => this.addToDOMlist(item.html));
   }
 }
 class ListItem {
@@ -130,13 +126,11 @@ class Form {
   }
 
   makeHidden() {
-    console.log("form hidden");
     this.popupWrapper.style.display = "none";
     this.input.value = "";
   }
 
   makeVisible() {
-    console.log("form visible");
     this.popupWrapper.style.display = "flex";
   }
 }
