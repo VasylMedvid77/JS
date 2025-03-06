@@ -8,13 +8,13 @@ class Page {
   }
 
   async fetchData() {
-    let request = await fetch(URL);
+    const request = await fetch(URL);
     return await request.json();
   }
 
   async init() {
-    let data = await this.fetchData();
-    for (const item of data["todos"]) {
+    const data = await this.fetchData();
+    for (let item of data["todos"]) {
       this.list.push(new ListItem(item));
     }
     this.render();
@@ -30,14 +30,14 @@ class Page {
 
   checkmarkHandler() {
     document.addEventListener("click", (event) => {
-      let clickedElement = event.target;
+      const clickedElement = event.target;
       if (clickedElement.className == "checkmark") {
         event.stopPropagation();
 
-        let checked = JSON.parse(clickedElement.getAttribute("checked"));
+        const checked = JSON.parse(clickedElement.getAttribute("checked"));
         console.log("Checked" + checked);
-        let htmlId = clickedElement.parentElement.id;
-        let itemIndex = this.list.findIndex((item) => item.id == htmlId);
+        const htmlId = clickedElement.parentElement.id;
+        const itemIndex = this.list.findIndex((item) => item.id == htmlId);
         // to preserve state after new render
         this.list[itemIndex].status = !checked;
         clickedElement.setAttribute("checked", `${!checked}`);
@@ -65,7 +65,7 @@ class Page {
     // first handler checks hover
     document.addEventListener("mouseover", (event) => {
       event.stopPropagation();
-      let hoveredElement = event.target;
+      const hoveredElement = event.target;
       // if hovered item is delete button then second handler created
       if (hoveredElement.className == "delete-btn") {
         // deleted button created as child element of li list item
@@ -75,8 +75,8 @@ class Page {
 
         hoveredElement.addEventListener("click", () => {
           // html id is the id of LI element. Every LI element have id from fetched data from BE
-          let htmlId = hoveredElement.parentElement.id;
-          let itemIndex = this.list.findIndex((item) => item.id == htmlId);
+          const htmlId = hoveredElement.parentElement.id;
+          const itemIndex = this.list.findIndex((item) => item.id == htmlId);
           console.log(`Deleted item: ${this.list[itemIndex].text}`);
 
           //delete item class instance from array storage
@@ -111,7 +111,7 @@ class ListItem {
   }
 
   html() {
-    let Item = document.createElement("li");
+    const Item = document.createElement("li");
     Item.textContent = this.text;
     Item.id = this.id;
     Item.setAttribute("completed", this.status);
@@ -141,5 +141,5 @@ class Form {
   }
 }
 
-let page = new Page();
+const page = new Page();
 page.init();
