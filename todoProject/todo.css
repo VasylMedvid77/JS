@@ -1,4 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  --show-completed: flex;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -41,14 +46,45 @@ div[class="checkmark"] {
   transform: translateY(-50%);
 }
 
-div[class="checkmark"][checked="true"] {
+div[class="checkmark"][data-checked="true"] {
   border: 2px dotted black;
   background-color: lightgrey;
 }
 
+input[type="checkbox"] {
+  width: 1.5em; /* Size of the checkbox */
+  height: 1.5em; /* Size of the checkbox */
+  border: 2px solid black; /* Border around the checkbox */
+  background-color: transparent; /* Transparent background */
+  appearance: none; /* Remove default checkbox styling */
+  position: fixed;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+}
+
+input[type="checkbox"]:checked {
+  border: 2px dotted black;
+  background-color: lightgrey; /* Border color when checked (optional) */
+}
+
+label {
+  color: lightgray;
+  background-color: transparent;
+  position: fixed;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  padding-right: 2em;
+  font-size: smaller;
+}
+
+label:hover {
+  color: black;
+}
+
 li[completed="true"] {
-  text-decoration: line-through;
-  color: lightgrey;
+  display: var(--show-completed);
 }
 
 li:hover {

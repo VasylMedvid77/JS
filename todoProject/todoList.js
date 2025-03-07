@@ -21,6 +21,7 @@ class Page {
     this.formHandler();
     this.deleteHandler();
     this.checkmarkHandler();
+    this.toggleCompletedHandler();
   }
 
   addToDOMlist(item) {
@@ -32,16 +33,14 @@ class Page {
     document.addEventListener("click", (event) => {
       const clickedElement = event.target;
       if (clickedElement.className === "checkmark") {
-        event.stopPropagation();
-
-        const checked = JSON.parse(clickedElement.getAttribute("checked"));
+        const checked = JSON.parse(clickedElement.getAttribute("data-checked"));
         const htmlId = clickedElement.parentElement.id;
         const itemIndex = this.list.findIndex(
           (item) => item.id === Number(htmlId)
         );
         // to preserve state after new render
         this.list[itemIndex].status = !checked;
-        clickedElement.setAttribute("checked", `${!checked}`);
+        clickedElement.setAttribute("data-checked", `${!checked}`);
         clickedElement.parentElement.setAttribute("completed", `${!checked}`);
       }
     });
@@ -64,26 +63,33 @@ class Page {
 
   deleteHandler() {
     // first handler checks hover
-    document.addEventListener("mouseover", (event) => {
-      event.stopPropagation();
-      const hoveredElement = event.target;
-      // if hovered item is delete button then second handler created
-      if (hoveredElement.className === "delete-btn") {
-        // deleted button created as child element of li list item
-        // having access to parent li we have ability to delete it from DOM
-        // as well as find item by id in general list and delete it from there
-        // potentially here we also can do POST request to backend to delete item by id thru API
+    document.getElementById("myList").addEventListener("click", (event) => {
+      const clickedOn = event.target;
+      if (clickedOn.className === "delete-btn") {
+        console.log("deleted");
+        const htmlId = clickedOn.parentElement.id;
+        const itemIndex = this.list.findIndex((item) => item.id === htmlId);
+        this.list.splice(itemIndex, 1);
+        clickedOn.parentElement.remove();
+      }
+    });
+  }
 
-        hoveredElement.addEventListener("click", () => {
-          // html id is the id of LI element. Every LI element have id from fetched data from BE
-          const htmlId = hoveredElement.parentElement.id;
-          const itemIndex = this.list.findIndex((item) => item.id === htmlId);
-          // delete item class instance from array storage
-          this.list.splice(itemIndex, 1);
-
-          // delete item from dom
-          hoveredElement.parentElement.remove();
-        });
+  toggleCompletedHandler() {
+    document.getElementById("top-header").addEventListener("click", (event) => {
+      const clickedOn = event.target;
+      if (clickedOn.id === "showcompleted") {
+        if (!clickedOn.checked) {
+          document.documentElement.style.setProperty(
+            "--show-completed",
+            "none"
+          );
+        } else {
+          document.documentElement.style.setProperty(
+            "--show-completed",
+            "flex"
+          );
+        }
       }
     });
   }
@@ -94,26 +100,49 @@ class Page {
   }
 }
 class ListItem {
+  static #pool = Array.from(ListItem.#randomIdSet());
+
   constructor(item) {
     this.text = item.todo;
-    this.id = item.id || Math.floor(Math.random() * 1000);
+    this.id = item.id || ListItem.#pool.pop();
     this.status = item.completed || false;
-    this.deleteButton = document.createElement("button");
-    this.deleteButton.className = "delete-btn";
-    this.checkmark = document.createElement("div");
-    this.checkmark.className = "checkmark";
-    this.checkmark.setAttribute("checked", item.completed);
-    this.html = this.html();
+    this.html = this.#generateHtml();
   }
 
-  html() {
-    const Item = document.createElement("li");
+  #generateHtml() {
+    const Item = ListItem.#createElem("li", {
+      completed: this.status,
+      id: this.id,
+    });
     Item.textContent = this.text;
-    Item.id = this.id;
-    Item.setAttribute("completed", this.status);
-    Item.append(this.deleteButton);
-    Item.append(this.checkmark);
+    const deleteButton = ListItem.#createElem("button", {
+      class: "delete-btn",
+    });
+    const checkmarkDiv = ListItem.#createElem("div", {
+      class: "checkmark",
+      "data-checked": this.status,
+    });
+    Item.append(deleteButton, checkmarkDiv);
     return Item;
+  }
+
+  static #createElem(type, ...args) {
+    const elem = document.createElement(type);
+    if (args.length) {
+      Object.entries(args[0]).forEach(([attribute, value]) => {
+        elem.setAttribute(attribute, value);
+      });
+    }
+    return elem;
+  }
+
+  static #randomIdSet() {
+    const randomSet = new Set();
+    do {
+      const id = Math.floor(Math.random() * 1000);
+      randomSet.add(id);
+    } while (randomSet.size < 1000);
+    return randomSet;
   }
 }
 class Form {
