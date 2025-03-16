@@ -21,7 +21,7 @@ class Page {
     this.formHandler();
     this.deleteHandler();
     this.checkmarkHandler();
-    this.toggleCompletedHandler();
+    this.toggleCompletedFilterHandler();
   }
 
   addToDOMlist(item) {
@@ -75,7 +75,7 @@ class Page {
     });
   }
 
-  toggleCompletedHandler() {
+  toggleCompletedFilterHandler() {
     document.getElementById("top-header").addEventListener("click", (event) => {
       const clickedOn = event.target;
       if (clickedOn.id === "showcompleted") {
