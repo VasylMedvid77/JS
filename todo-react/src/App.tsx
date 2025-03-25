@@ -1,17 +1,26 @@
-import "./App.css";
-import AddNewPopup from "./components/AddNewPopup.tsx";
-import Footer from "./components/Footer.tsx";
-import Header from "./components/Header.tsx";
-import OrderedList from "./components/OrderedList.tsx";
+import { useState, useEffect } from "react";
+import { TodosResponce } from "./types";
+import List from "./components/List";
+const URL = "https://dummyjson.com/todos";
 
-function App(props) {
+function App() {
+  const [list, setList] = useState<TodosResponce | null>(null);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const request = await fetch(URL);
+    const responce: TodosResponce = await request.json();
+    setList(responce);
+  };
+  if (!list) {
+    return <h1>Loading...</h1>;
+  }
   return (
-    <>
-      <Header />
-      <OrderedList />
-      <AddNewPopup />
-      <Footer />
-    </>
+    <div>
+      <List todos={list.todos} />
+    </div>
   );
 }
 
