@@ -1,15 +1,16 @@
-import { ResponceItem } from "../types";
+import { ResponseItem } from "../types";
 import ListItem from "./ListItem";
 
-type Props = {
-  todos: ResponceItem[];
-};
-
-export default function List({ todos }: Props) {
+export default function List({ todos, onDelete }: { todos: ResponseItem[] }) {
   return (
     <ul>
-      {todos.map((item: ResponceItem) => (
-        <ListItem key={item.id} text={item.todo} />
+      {todos.map((item: ResponseItem) => (
+        <ListItem
+          key={item.id}
+          id={item.id}
+          text={item.todo}
+          onDelete={onDelete}
+        />
       ))}
     </ul>
   );

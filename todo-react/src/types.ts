@@ -1,12 +1,12 @@
-export type ResponceItem = {
+export type ResponseItem = {
   id: number;
   todo: string;
   completed: boolean;
   userId: number;
 };
 
-export type TodosResponce = {
-  todos: ResponceItem[];
+export type TodosResponse = {
+  todos: ResponseItem[];
   total: number;
   skip: number;
   limit: number;

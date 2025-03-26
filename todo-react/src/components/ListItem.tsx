@@ -1,10 +1,35 @@
-export default function ListItem({ key, text }: { key: number; text: string }) {
+import { useState } from "react";
+
+export default function ListItem({
+  id,
+  text,
+  onDelete,
+}: {
+  id: number;
+  text: string;
+  onDelete: (id: number) => void;
+}) {
+  const [checked, setChecked] = useState(false);
   return (
     <>
-      <li key={key}>
+      <li style={{ textDecoration: checked ? "line-through" : "none" }}>
+        <input
+          type="checkbox"
+          checked={checked}
+          style={{ display: "inline-block" }}
+          onChange={() => {
+            setChecked(!checked);
+          }}
+        />
         {text}
         <span>
-          <button>X</button>
+          <button
+            onClick={() => {
+              onDelete(id);
+            }}
+          >
+            X
+          </button>
         </span>
       </li>
     </>
