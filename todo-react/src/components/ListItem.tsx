@@ -9,21 +9,23 @@ export default function ListItem({
   text: string;
   onDelete: (id: number) => void;
 }) {
-  const [checked, setChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   return (
     <>
-      <li style={{ textDecoration: checked ? "line-through" : "none" }}>
+      <li style={{ textDecoration: isChecked ? "line-through" : "none" }}>
         <input
+          className="checkbox"
           type="checkbox"
-          checked={checked}
+          checked={isChecked}
           style={{ display: "inline-block" }}
           onChange={() => {
-            setChecked(!checked);
+            setIsChecked(!isChecked);
           }}
         />
         {text}
         <span>
           <button
+            className="delete-btn"
             onClick={() => {
               onDelete(id);
             }}
